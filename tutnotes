@@ -342,3 +342,20 @@ hotspots = pd.DataFrame(resp.json()['results'])
 
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
+
+
+L = ['a','b','c','d']
+print "".join(L)
+o/p: abcd
+
+ord() function converts a character into its ASCII notation and chr() converts the ASCII to character.
+chr(ord('A'))  
+O/P: A
+
+Each object in Python has a unique id. The id() function returns the object’s id.
+
+Class is a user defined data type not a core type like list , tupe , dict
+
+~x is equivalent to -(x+1).
+
+
