@@ -1,0 +1,344 @@
+Import Data:
+	1.Flat Files  eg: '.txts', '.csv'
+	2.Files from other software  eg: 'Excel'
+	3.Relatinoal Databases
+
+Table Data : 
+	Row, Coloumn
+#Reading and Writing Files in Python
+file_object  = open(“filename”, “mode”) 
+
+#the mode attribute of a file object tells you which mode a file was opened in. And the name attribute tells you the name of the file that the file object has opened. 
+
+Including a mode argument is optional because a default value of ‘r’ will be assumed if it is omitted. The ‘r’ value stands for readonly mode,
+
+The modes are: 
+
+‘r’ – Read mode which is used when the file is only being read  (Read Only)
+
+‘w’ – Write mode which is used to edit and write new information to the file (any existing files with the same name will be erased when this mode is activated) (Update)
+
+‘a’ – Appending mode, which is used to add new data to the end of the file; that is new information is automatically amended to the end (Edit)
+
+‘r+’ – Special read and write mode, which is used to handle both actions when working with a file 
+
+
+file_object = open("testfile.txt","w")
+
+# Writing in Text File
+file_object.write("Hello Python!\n")
+file_object.write("Python Bang Bang!!")
+print(file_object.closed)
+file_object.close()
+print(file_object.closed)
+
+
+#Reading a Text File in Python
+If you need to extract a string that contains all characters in the file, you can use the following method: 
+
+file.read() 
+The output of that command will display all the text inside the file
+
+
+Reading a text file:
+
+filename = "shivam.txt"
+file = open(filename, mode='r') * r is to readonly
+text = file.read() # Returns the contebt of a file eg. text
+file.close()
+print(text)
+# check whether the file is closed or not
+file.closed ---> returns True/False
+
+
+Writing to a file:
+
+filename = 'test.txt'
+file = open(filename, mode='w') # w is to write
+file.close()
+
+
+Context manager with:
+# No need to close the file explicitly when open using 'with'
+# closes the file automatically
+
+with open('test.txt') as file:
+	print(file.read())
+
+file.readline() # reading a single line at a time
+
+IPython:
+	In Ipython,starting a line with ! gives you complete system shell access. This means that the IPython magic command !ls will display the contents of your current directory. 
+
+ 	eg: !pwd
+
+
+Delimiters : commas, tabs
+
+
+Importing flat files using Numpy:
+#Why Numpy? 
+
+import numpy as np
+filename = 'numeric.txt'
+data = np.loadtxt(filename, delimiter=',')
+data # Matrix
+
+# Removing header row from file
+np.loadtxt(filename, delimiter=',', skiprows=1)
+
+usecols=[0,2]
+dtype=str
+
+There are a number of arguments that np.loadtxt() takes that you'll find useful: 
+
+delimiter: changes the delimiter that loadtxt() is expecting, for example, you can use ',' and '\t' for comma-delimited and tab-delimited respectively; 
+
+skiprows: allows you to specify how many rows (not indices) you wish to skip; 
+
+usecols : takes a list of the indices of the columns you wish to keep.
+
+
+# Load the data: data
+data = np.loadtxt('file.txt', delimiter='\t', skiprows=1, usecols=[1,3])
+#the file you're importing is tab-delimited, you want to skip the first row(may be header row) and you only want to import the first and third columns i.e index 1 & 2.
+
+Importing different datatypes:
+
+data_float = np.loadtxt('file.txt', delimiter='\t', dtype=float, skiprows=1)
+
+# we are skipping the header row becuase string can't be converted to float
+# by default the mixed data type will be converted to string
+
+
+Working with mixed datatypes:
+
+Much of the time you will need to import datasets which have different datatypes in different columns; one column may contain strings and another floats, for example. The function np.loadtxt() will freak at this. There is another function, np.genfromtxt(), which can handle such structures. If we pass dtype=None to it, it will figure out what types each column should be.
+
+Import 'titanic.csv' using the function np.genfromtxt() as follows:
+
+data = np.genfromtxt('titanic.csv', delimiter=',', names=True, dtype=None)
+
+Here, the first argument is the filename, the second specifies the delimiter , and the third argument names tells us there is a header. Because the data are of different types, data is an object called a structured array. Because numpy arrays have to contain elements that are all the same type, the structured array solves this by being a 1D array, where each element of the array is a row of the flat file imported
+
+np.shape(data)
+(891,)
+
+Acccessing rows and columns of structured arrays is super-intuitive: to get the ith row, merely execute data[i] and to get the column with name 'Fare', execute data['Fare'].
+         	
+np.genfromtxt() to import data containing mixed datatypes. There is also another function np.recfromcsv() that behaves similarly to np.genfromtxt(), except that its default dtype is None.
+
+You'll only need to pass file to it because it has the defaults delimiter=',' and names=True in addition to dtype=None!
+# Import file using np.recfromcsv: 
+d = np.recfromcsv(file)
+
+
+# Import flat files using pandas
+
+Dataframes:
+
+import pandas as pd
+filename = '.csv'
+data = pd.read_csv(filename)
+
+data.head()
+data.values
+
+
+Numpy : n-d-arrays
+Pandas : Dataframe object
+
+Using pandas to import flat files as DataFrames
+
+read_csv() and read_table().
+
+# Read the first 5 rows of the file into a DataFrame: data
+data = pd.read_csv(file, nrows=5, header=None)
+
+# Build a numpy array from the DataFrame: data_array
+data_array = data.values
+print(data_array)
+
+Customizing your pandas import
+
+# Import file: data
+data = pd.read_csv(file, sep='\t', comment='#', na_values='Nothing')
+
+sep (the pandas version of delim)
+comment takes characters that comments occur after in the file, which in this case is '#'
+na_values takes a list of strings to recognize as NA/NaN, in this case the string 'Nothing'.
+
+
+#Import Excel 
+count_df = pd.read_excel('.xlsx')
+count_df.head()
+
+# introduction-to-relational-databases-in-python
+SQLAIchemy
+
+#Connecting to databases
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///census_nyc.sqlite')
+connection = engine.connect()
+
+Driver+Dialect Filename
+
+engine.table_names()
+#print the names of the tables it contains 
+
+
+Reflection is the process of reading the database and building the metadata based on that information
+is very useful for working with existing databases.
+refelection : read databse and build table objects
+automatically load tables from a database 
+
+from sqlqlchemy import MetaData, Table
+metadata = MetaData()
+
+census = Table('census', metadata, autoload=True), autoload_with=engine)
+print(repr(census))
+
+#Gives table info
+
+Engine : common interface to a database
+
+An engine is just a common interface to a database, and the information it requires to connect to one is contained in a connection string, such as sqlite:///census_nyc.sqlite. .sqlite is the database driver, while census_nyc.sqlite is a SQLite file contained in the local directory.
+
+Note that when you just want to print the table names, you do not need to use engine.connect() after creating the engine.
+
+Viewing Table Details
+census = Table('census', metadata, autoload=True, autoload_with=engine)
+
+census.columns.keys()  
+would return a list of column names of the census table.
+cenus = Table object
+
+table objects are stored in the metadata.tables dictionary, so you can get the metadata of your census table with metadata.tables['census']. This is similar to your use of the repr() function on the census table
+
+print(repr(metadata.tables['census']))
+
+
+
+#Writing sql
+
+stmt = 'SELECT * FROM people '
+result_proxy = connection.execute(stmt)
+results = result_proxy.fetchall()
+
+first_row= results[0]
+first_row.keys() # Coloumn name
+first_row.state # colomn value
+
+SQLAlchemy provides a nice "Pythonic" way of interacting with databases. 
+select([census])
+print(stmt)
+
+SQLALchemy select statement
+Requires a list of one or more tables or coloumns
+Using atable will select all the coloumns in it
+
+# Import select
+from sqlalchemy import select
+
+# Reflect census table via engine: census
+census = Table('census', metadata, autoload=True, autoload_with=engine)
+
+# Build select statement for census table: stmt
+stmt = select([census])
+
+# Print the emitted statement to see the SQL emitted
+print(stmt)
+
+# Execute the statement and print the results
+resultset = connection.execute(stmt).fetchall()
+print(resultset)
+
+
+differences between a ResultProxy and a ResultSet:
+
+ResultProxy: The object returned by the .execute() method. It can be used in a variety of ways to get the data returned by the query.
+
+ResultSet: The actual data asked for in the query when using a fetch method such as .fetchall() on a ResultProxy.
+
+# Get the first row of the results by using an index: first_row
+first_row = results[0]
+
+# Print the first row of the results
+print(first_row)
+
+# Print the first column of the first row by using an index
+print(first_row[0])
+
+# Print the 'state' column of the first row by using its name
+print(first_row['state'])
+
+_____________________________________________________________________________________________________
+_____________________________________________________________________________________________________
+
+
+Numerical Data type:
+	int str 
+
+Common Data Types:
+	float 
+	bool : represent logical values. Can only be True or False (the capitalization is important!).
+compound data type: (group values together:)
+	Lists
+
+
+Type conversion:
+ str() , int(), float() and bool() will help you convert Python values into any type. 
+
+-----------------------
+Datacamp : Numpy (n-d arrays)
+
+Numppy arrays contain only one data type elements
+
+converted to string automatically
+
+matrix operation between arrays
+
+Vector & 2D
+
+bmi > 23
+return an array conatining bool values depending on the condition
+the condition will  be checked for each element in an array
+
+bmi[bmi>23]
+return the array where the condition is TRue
+
+Numpy arrays cannot contain elements with different types. If you try to build such a list, some of the elements' types are changed to end up with a homogeneous list. This is known as type coercion.
+
+
+data type of numpy arrays : ndarray
+
+np_array.shape
+(rows, coloumns)
+
+Subsetting:
+np_array[row_no, coloumn_no]
+
+A whole  first row
+np_array[1, :]
+
+first second and third  columns
+np_array[:, 1:3]
+
+np.mean(np_height)
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+Request data from API in pyton
+
+# URL and header for Parse
+base_url = 'https://api.parse.com/1/classes/'
+header = {'X-Parse-Application-Id': 'PkngqKtJygU9WiQ1GXM9eC0a17tKmioKKmpWftYr',
+          'X-Parse-REST-API-Key': 'ptZAL499EEcmwIrghLTyg3IDB2jqHA3vV4AFp0Bh'}
+data = {'limit': '1000'}
+
+# hotspots
+resp = requests.get(base_url + 'hotspot', headers=header, data=data)
+hotspots = pd.DataFrame(resp.json()['results'])
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
